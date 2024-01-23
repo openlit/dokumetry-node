@@ -157,7 +157,7 @@ We welcome contributions to the Doku NPM Package (`dokumetry`) project. Please r
 
 ## License
 
-Doku NPM Package (`dokumetry`) is available under the [GPL-3.0](LICENSE).
+Doku NPM Package (`dokumetry`) is available under the [Apache-2.0 license](LICENSE).
 
 ## Support
 
