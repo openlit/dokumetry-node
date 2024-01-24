@@ -1,6 +1,7 @@
 # Doku Node SDK - dokumetry
 
 [![Doku NPM Package](https://img.shields.io/badge/Doku-orange)](https://github.com/dokulabs/doku)
+[![Documentation](https://img.shields.io/badge/Documentation-orange?logo=Google-Docs&logoColor=white)](https://dokulabs.mintlify.app/0.0.4/dokumetry/node/introduction)
 [![License](https://img.shields.io/github/license/dokulabs/dokumetry-node?label=license&logo=github&color=f80&logoColor=fff%22%20alt=%22License)](https://github.com/dokulabs/dokumetry-node/blob/main/LICENSE)
 [![Package Version](https://img.shields.io/github/tag/dokulabs/dokumetry-node.svg?&label=Package%20Version&logo=npm)](https://github.com/dokulabs/dokumetry-node/tags)
 [![GitHub Last Commit](https://img.shields.io/github/last-commit/dokulabs/dokumetry-node)](https://github.com/dokulabs/dokumetry-node/pulse)
