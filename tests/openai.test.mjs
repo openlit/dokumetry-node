@@ -8,7 +8,7 @@ describe('OpenAI Test', () => {
 
   before(async () => {
     openai = new OpenAI({
-      apiKey: process.env.OPENAI_API_TOKEN,
+      apiKey: process.env.OPENAI_API_KEY,
     });
     await DokuMetry.init({llm: openai, dokuUrl: process.env.DOKU_URL, apiKey: process.env.DOKU_TOKEN, environment: "dokumetry-testing", applicationName: "dokumetry-node-test", skipResp: false});
   });
