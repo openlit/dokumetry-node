@@ -41,6 +41,7 @@ export default function initAnthropic({ llm, dokuUrl, apiKey, environment, appli
     const duration = (end - start) / 1000;
 
     const data = {
+      llmReqId: response.id,
       environment: environment,
       applicationName: applicationName,
       sourceLanguage: 'Javascript',

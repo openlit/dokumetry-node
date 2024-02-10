@@ -64,6 +64,7 @@ export default function initOpenAI({ llm, dokuUrl, apiKey, environment, applicat
             dataResponse += content;
             passThroughStream.push(chunk); // Push chunk to the pass-through stream
           }
+          var responseId = chunk.id;
         }
         passThroughStream.push(null); // Signal end of the pass-through stream
   
@@ -93,6 +94,7 @@ export default function initOpenAI({ llm, dokuUrl, apiKey, environment, applicat
   
         // Prepare the data object for Doku
         const data = {
+          llmReqId: responseId,
           environment: environment,
           applicationName: applicationName,
           sourceLanguage: 'Javascript',
@@ -136,6 +138,7 @@ export default function initOpenAI({ llm, dokuUrl, apiKey, environment, applicat
       }
       let prompt = formattedMessages.join("\n");
       const data = {
+        llmReqId: response.id,
         environment: environment,
         applicationName: applicationName,
         sourceLanguage: 'Javascript',
@@ -169,6 +172,7 @@ export default function initOpenAI({ llm, dokuUrl, apiKey, environment, applicat
           data.promptTokens = response.usage.prompt_tokens;
           data.totalTokens = response.usage.total_tokens;
       }
+
       await sendData(data, dokuUrl, apiKey);
 
       return response;
@@ -198,6 +202,7 @@ export default function initOpenAI({ llm, dokuUrl, apiKey, environment, applicat
             dataResponse += content;
             passThroughStream.push(chunk); // Push chunk to the pass-through stream
           }
+          var responseId = chunk.id;
         }
         passThroughStream.push(null); // Signal end of the pass-through stream
   
@@ -206,6 +211,7 @@ export default function initOpenAI({ llm, dokuUrl, apiKey, environment, applicat
         const duration = (end - start) / 1000;
         // Prepare the data object for Doku
         const data = {
+          llmReqId: responseId,
           environment: environment,
           applicationName: applicationName,
           sourceLanguage: 'Javascript',
@@ -229,6 +235,7 @@ export default function initOpenAI({ llm, dokuUrl, apiKey, environment, applicat
       const duration = (end - start) / 1000;
 
       const data = {
+        llmReqId: response.id,
         environment: environment,
         applicationName: applicationName,
         sourceLanguage: 'Javascript',
@@ -308,7 +315,7 @@ export default function initOpenAI({ llm, dokuUrl, apiKey, environment, applicat
       skipResp: skipResp,
       requestDuration: duration,
       model: params.model,
-      finetuneJobId: response.id,
+      llmReqId: response.id,
       finetuneJobStatus: response.status,
     };
 
@@ -331,9 +338,10 @@ export default function initOpenAI({ llm, dokuUrl, apiKey, environment, applicat
     }
 
     const quality = params.quality ?? 'standard';
-
+    var responseId = response.created;
     for (const item of response.data) {
       const data = {
+        llmReqId: responseId,
         environment: environment,
         applicationName: applicationName,
         sourceLanguage: 'Javascript',
@@ -365,8 +373,10 @@ export default function initOpenAI({ llm, dokuUrl, apiKey, environment, applicat
     if (params.response_format && params.response_format === 'b64_json') {
       imageFormat = 'b64_json';
     }
+    var responseId = response.created;
     for (const item of response.data) {
       const data = {
+        llmReqId: responseId,
         environment: environment,
         applicationName: applicationName,
         sourceLanguage: 'Javascript',
