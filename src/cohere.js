@@ -91,7 +91,7 @@ export default function initCohere({ llm, dokuUrl, apiKey, environment, applicat
       requestDuration: duration,
       model: model,
       prompt: prompt,
-      promptTokens: response.meta["billed_units"]["input_tokens"],
+      promptTokens: response.meta["billedUnits"]["inputTokens"],
     };
 
     await sendData(data, dokuUrl, apiKey);
@@ -118,9 +118,9 @@ export default function initCohere({ llm, dokuUrl, apiKey, environment, applicat
       requestDuration: duration,
       model: model,
       prompt: prompt,
-      promptTokens: response.meta["billedUnits"]["outputTokens"],
-      completionTokens: response.meta["billedUnits"]["inputTokens"],
-      totalTokens: response.token_count["billedUnits"],
+      promptTokens: response.meta["billed_units"]["output_tokens"],
+      completionTokens: response.meta["billed_units"]["input_tokens"],
+      totalTokens: response.token_count["billed_units"],
       response: response.text,
     };
 
