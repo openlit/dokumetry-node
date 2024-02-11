@@ -81,7 +81,7 @@ describe('OpenAI Test', () => {
   }).timeout(30000);
 
   it('should return a response with url as "https://api.openai.com/v1/audio/speech"', async () => {
-    await DokuMetry.init({llm: openai, dokuUrl: process.env.DOKU_URL, apiKey: process.env.DOKU_TOKEN, environment: "dokumetry-testing", applicationName: "dokumetry-node-test", skipResp: false});
+    DokuMetry.init({llm: openai, dokuUrl: process.env.DOKU_URL, apiKey: process.env.DOKU_TOKEN, environment: "dokumetry-testing", applicationName: "dokumetry-node-test", skipResp: false});
     const audioSpeech = await openai.audio.speech.create({
       model: 'tts-1',
       voice: 'alloy',
