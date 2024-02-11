@@ -1,30 +1,6 @@
 import {sendData} from './helpers.js';
 
 /**
- * Counts the number of tokens in the given text.
- *
- * @param {string} text - The input text.
- * @return {number} - The calculated number of tokens.
- *
- * @jsondoc
- * {
- *   "description": "Counts the number of tokens in the given text",
- *   "params": [{"name": "text", "type": "string", "description": "Text"}],
- *   "returns": {"type": "number", "description": "Number of tokens."}
- * }
- */
-function countTokens(text) {
-  const tokensPerWord = 2.5;
-
-  // Split the text into words
-  const words = text.split(/\s+/);
-
-  // Calculate the number of tokens
-  const numTokens = Math.round(words.length * tokensPerWord);
-
-  return numTokens;
-}
-/**
  * Initializes Cohere functionality with performance tracking and data logging.
  *
  * @param {Object} llm - The Cohere function object.
@@ -72,13 +48,14 @@ export default function initCohere({ llm, dokuUrl, apiKey, environment, applicat
 
     for (const generation of response.generations) {
       const data = {
+        llmReqId: generation.id,
         environment: environment,
         applicationName: applicationName,
         sourceLanguage: 'Javascript',
         endpoint: 'cohere.generate',
         skipResp: skipResp,
-        completionTokens: countTokens(generation.text),
-        promptTokens: countTokens(prompt),
+        completionTokens: response.meta["billedUnits"]["outputTokens"],
+        promptTokens: response.meta["billedUnits"]["inputTokens"],
         requestDuration: duration,
         model: model,
         prompt: prompt,
@@ -89,7 +66,8 @@ export default function initCohere({ llm, dokuUrl, apiKey, environment, applicat
       if (!params.hasOwnProperty('stream') || params.stream !== true) {
         data.finishReason = generation.finish_reason;
       }
-      await sendData(data, dokuUrl, apiKey);
+      console.log(data);
+      //await sendData(data, dokuUrl, apiKey);
     }
 
     return response;
@@ -113,7 +91,7 @@ export default function initCohere({ llm, dokuUrl, apiKey, environment, applicat
       requestDuration: duration,
       model: model,
       prompt: prompt,
-      promptTokens: response.meta["billed_units"]["input_tokens"],
+      promptTokens: response.meta["billedUnits"]["inputTokens"],
     };
 
     await sendData(data, dokuUrl, apiKey);
@@ -131,6 +109,7 @@ export default function initCohere({ llm, dokuUrl, apiKey, environment, applicat
     const prompt = params.message;
 
     const data = {
+      llmReqId: response.response_id,
       environment: environment,
       applicationName: applicationName,
       sourceLanguage: 'Javascript',
@@ -141,7 +120,7 @@ export default function initCohere({ llm, dokuUrl, apiKey, environment, applicat
       prompt: prompt,
       promptTokens: response.meta["billed_units"]["output_tokens"],
       completionTokens: response.meta["billed_units"]["input_tokens"],
-      totalTokens: response.token_count["billed_tokens"],
+      totalTokens: response.token_count["billed_units"],
       response: response.text,
     };
 
@@ -169,12 +148,15 @@ export default function initCohere({ llm, dokuUrl, apiKey, environment, applicat
 
     data.response = ""
     for await (const message of response) {
+      if (message.eventType === "stream-end") {
+        data.llmReqId = message.response.response_id;
+        data.promptTokens = message.response.meta.billed_units["input_tokens"];
+        data.completionTokens = message.response.meta.billed_units["output_tokens"];
+      }
       data.response += message.eventType === "text-generation" ? message.text : "";
       // Pass the message along so it's not consumed
       yield message; // this allows the message to flow back to the original caller
     }
-    data.promptTokens = countTokens(prompt)
-    data.completionTokens = countTokens(data.response)
     data.totalTokens = data.promptTokens + data.completionTokens
 
     const end = performance.now();
@@ -195,14 +177,15 @@ export default function initCohere({ llm, dokuUrl, apiKey, environment, applicat
     const prompt = params.text;
 
     const data = {
+      llmReqId: response.id,
       environment: environment,
       applicationName: applicationName,
       sourceLanguage: 'Javascript',
       endpoint: 'cohere.summarize',
       skipResp: skipResp,
       requestDuration: duration,
-      completionTokens: response.meta["billed_units"]["output_tokens"],
-      promptTokens: response.meta["billed_units"]["input_tokens"],
+      completionTokens: response.meta["billedUnits"]["outputTokens"],
+      promptTokens: response.meta["billedUnits"]["inputTokens"],
       model: model,
       prompt: prompt,
       response: response.summary,

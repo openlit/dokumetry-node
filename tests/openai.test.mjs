@@ -10,10 +10,10 @@ describe('OpenAI Test', () => {
     openai = new OpenAI({
       apiKey: process.env.OPENAI_API_KEY,
     });
-    await DokuMetry.init({llm: openai, dokuUrl: process.env.DOKU_URL, apiKey: process.env.DOKU_TOKEN, environment: "dokumetry-testing", applicationName: "dokumetry-node-test", skipResp: false});
   });
 
   it('should return a response with object as "chat.completion"', async () => {
+    await DokuMetry.init({llm: openai, dokuUrl: process.env.DOKU_URL, apiKey: process.env.DOKU_TOKEN, environment: "dokumetry-testing", applicationName: "dokumetry-node-test", skipResp: false});
     const chatCompletion = await openai.chat.completions.create({
       messages: [{role: 'user', content: 'Say this is a test'}],
       model: 'gpt-3.5-turbo',
@@ -23,6 +23,7 @@ describe('OpenAI Test', () => {
   });
 
   it('should return a response with object as "text_completion"', async () => {
+    await DokuMetry.init({llm: openai, dokuUrl: process.env.DOKU_URL, apiKey: process.env.DOKU_TOKEN, environment: "dokumetry-testing", applicationName: "dokumetry-node-test", skipResp: false});
     const completion = await openai.completions.create({
       model: 'gpt-3.5-turbo-instruct',
       prompt: 'Say this is a test.',
@@ -33,6 +34,7 @@ describe('OpenAI Test', () => {
   });
 
   it('should return a response with object as "embedding"', async () => {
+    await DokuMetry.init({llm: openai, dokuUrl: process.env.DOKU_URL, apiKey: process.env.DOKU_TOKEN, environment: "dokumetry-testing", applicationName: "dokumetry-node-test", skipResp: false});
     const embeddings = await openai.embeddings.create({
       model: 'text-embedding-ada-002',
       input: 'The quick brown fox jumped over the lazy dog',
@@ -43,6 +45,7 @@ describe('OpenAI Test', () => {
   });
 
   it('should return a response with object as "fine_tuning.job"', async () => {
+    await DokuMetry.init({llm: openai, dokuUrl: process.env.DOKU_URL, apiKey: process.env.DOKU_TOKEN, environment: "dokumetry-testing", applicationName: "dokumetry-node-test", skipResp: false});
     try {
       const fineTuningJob = await openai.fineTuning.jobs.create({
         training_file: 'file-m36cc45komO83VJKAY1qVgeP',
@@ -59,6 +62,7 @@ describe('OpenAI Test', () => {
   }).timeout(10000);
 
   it('should return a response with "created" field', async () => {
+    await DokuMetry.init({llm: openai, dokuUrl: process.env.DOKU_URL, apiKey: process.env.DOKU_TOKEN, environment: "dokumetry-testing", applicationName: "dokumetry-node-test", skipResp: false});
     const imageGeneration = await openai.images.generate({
       model: 'dall-e-2',
       prompt: 'Generate an image of a cat.',
@@ -68,6 +72,7 @@ describe('OpenAI Test', () => {
   }).timeout(30000);
 
   it('should return a response with "created" field', async () => {
+    await DokuMetry.init({llm: openai, dokuUrl: process.env.DOKU_URL, apiKey: process.env.DOKU_TOKEN, environment: "dokumetry-testing", applicationName: "dokumetry-node-test", skipResp: false});
     const imageVariation = await openai.images.createVariation({
       image: fs.createReadStream('tests/test-image-for-openai.png'),
     });
@@ -76,12 +81,12 @@ describe('OpenAI Test', () => {
   }).timeout(30000);
 
   it('should return a response with url as "https://api.openai.com/v1/audio/speech"', async () => {
+    DokuMetry.init({llm: openai, dokuUrl: process.env.DOKU_URL, apiKey: process.env.DOKU_TOKEN, environment: "dokumetry-testing", applicationName: "dokumetry-node-test", skipResp: false});
     const audioSpeech = await openai.audio.speech.create({
       model: 'tts-1',
       voice: 'alloy',
       input: 'Today is a wonderful day to build something people love!',
     });
-
     expect(audioSpeech.url).to.equal('https://api.openai.com/v1/audio/speech');
-  });
+  }).timeout(30000);
 });

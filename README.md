@@ -50,7 +50,7 @@ const openai = new OpenAI({
 });
 
 // Pass the above `openai` object along with your DOKU URL and API key and this will make sure that all OpenAI calls are automatically tracked.
-DokuMetry.init({llm: openai, dokuURL: "YOUR_DOKU_URL", apiKey: "YOUR_DOKU_TOKEN"})
+DokuMetry.init({llm: openai, dokuUrl: "YOUR_DOKU_URL", apiKey: "YOUR_DOKU_TOKEN"})
 
 async function main() {
   const chatCompletion = await openai.chat.completions.create({
@@ -73,7 +73,7 @@ const anthropic = new Anthropic({
 });
 
 // Pass the above `anthropic` object along with your DOKU URL and API key and this will make sure that all Anthropic calls are automatically tracked.
-DokuMetry.init({llm: anthropic, dokuURL: "YOUR_DOKU_URL", apiKey: "YOUR_DOKU_TOKEN"})
+DokuMetry.init({llm: anthropic, dokuUrl: "YOUR_DOKU_URL", apiKey: "YOUR_DOKU_TOKEN"})
 
 async function main() {
   const completion = await anthropic.completions.create({
@@ -97,7 +97,7 @@ const cohere = new CohereClient({
 });
 
 // Pass the above `cohere` object along with your DOKU URL and API key and this will make sure that all Cohere calls are automatically tracked.
-DokuMetry.init({llm: cohere, dokuURL: "YOUR_DOKU_URL", apiKey: "YOUR_DOKU_TOKEN"})
+DokuMetry.init({llm: cohere, dokuUrl: "YOUR_DOKU_URL", apiKey: "YOUR_DOKU_TOKEN"})
 
 (async () => {
     const prediction = await cohere.generate({
@@ -114,7 +114,7 @@ DokuMetry.init({llm: cohere, dokuURL: "YOUR_DOKU_URL", apiKey: "YOUR_DOKU_TOKEN"
 | Parameter         | Description                                               | Required      |
 |-------------------|-----------------------------------------------------------|---------------|
 | llm               | Language Learning Model (LLM) Object to track             | Yes           |
-| dokuURL           | URL of your Doku Instance                                 | Yes           |
+| dokuUrl           | URL of your Doku Instance                                 | Yes           |
 | apiKey            | Your Doku API key                                         | Yes           |
 | environment       | Custom environment tag to include in your metrics         | Optional      |
 | applicationName   | Custom application name tag for your metrics              | Optional      |

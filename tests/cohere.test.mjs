@@ -6,12 +6,9 @@ describe('Cohere Test', () => {
   const cohere = new CohereClient({
     apiKey: process.env.COHERE_API_TOKEN,
   });
-  
-  before(async () => {
-    DokuMetry.init({llm: cohere, dokuUrl: process.env.DOKU_URL, apiKey: process.env.DOKU_TOKEN, environment: "dokumetry-testing", applicationName: "dokumetry-node-test", skipResp: false});
-  });
 
   it('should return a response with "created" field', async () => {
+    DokuMetry.init({llm: cohere, dokuUrl: process.env.DOKU_URL, apiKey: process.env.DOKU_TOKEN, environment: "dokumetry-testing", applicationName: "dokumetry-node-test", skipResp: false});
     const text =
     'Ice cream is a sweetened frozen food eaten as a snack or dessert. ' +
     'It may be made from milk or cream and is flavoured with a sweetener, ' +
@@ -48,6 +45,7 @@ describe('Cohere Test', () => {
   }).timeout(10000);
 
   it('should return a response with prompt as "Doku"', async () => {
+    DokuMetry.init({llm: cohere, dokuUrl: process.env.DOKU_URL, apiKey: process.env.DOKU_TOKEN, environment: "dokumetry-testing", applicationName: "dokumetry-node-test", skipResp: false});
     try {
       const generate = await cohere.generate({
         prompt: 'Doku',
@@ -64,6 +62,7 @@ describe('Cohere Test', () => {
   }).timeout(10000);
 
   it('should return a response with object as "embed"', async () => {
+    DokuMetry.init({llm: cohere, dokuUrl: process.env.DOKU_URL, apiKey: process.env.DOKU_TOKEN, environment: "dokumetry-testing", applicationName: "dokumetry-node-test", skipResp: false});
     try {
       const embeddings = await cohere.embed({
         texts: ['This is a test'],
@@ -79,6 +78,7 @@ describe('Cohere Test', () => {
   }).timeout(20000);
 
   it('should return a response with object as "chat"', async () => {
+    DokuMetry.init({llm: cohere, dokuUrl: process.env.DOKU_URL, apiKey: process.env.DOKU_TOKEN, environment: "dokumetry-testing", applicationName: "dokumetry-node-test", skipResp: false});
     try {
       const chatResponse = await cohere.chat({
         message: 'Say this is a test',
