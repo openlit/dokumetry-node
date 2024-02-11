@@ -87,7 +87,6 @@ describe('OpenAI Test', () => {
       voice: 'alloy',
       input: 'Today is a wonderful day to build something people love!',
     });
-
     expect(audioSpeech.url).to.equal('https://api.openai.com/v1/audio/speech');
-  });
+  }).timeout(30000);
 });
