@@ -56,7 +56,7 @@ function init({ llm, dokuUrl, apiKey, environment="default", applicationName="de
     initOpenAI({ llm, dokuUrl, apiKey, environment, applicationName, skipResp });
   } else if (llm.generate && typeof llm.rerank === 'function') {
     initCohere({ llm, dokuUrl, apiKey, environment, applicationName, skipResp });
-  } else if (typeof llm.summarize=== 'function') {
+  } else if (llm.messages && typeof llm.messages.create === 'function') {
     initAnthropic({ llm, dokuUrl, apiKey, environment, applicationName, skipResp });
   }
 }
