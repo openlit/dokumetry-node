@@ -11,33 +11,30 @@
 [![Linting](https://github.com/dokulabs/dokumetry-node/actions/workflows/lint.yml/badge.svg?branch=main)](https://github.com/dokulabs/dokumetry-node/actions/workflows/lint.yml)
 [![CodeQL](https://github.com/dokulabs/dokumetry-node/actions/workflows/github-code-scanning/codeql/badge.svg?branch=main)](https://github.com/dokulabs/dokumetry-node/actions/workflows/github-code-scanning/codeql)
 
-[Doku Node SDK](https://www.npmjs.com/package/dokumetry) (`dokumetry`) empowers you to effortlessly track and monitor language learning model (LLM) usage data and metrics from your Javascript/Typescript code. It seamlessly integrates with major LLM Platforms:
+[Doku Node SDK](https://www.npmjs.com/package/dokumetry) (`dokumetry`) is your workhorse for collecting and transmitting language learning model (LLM) usage data and metrics with zero added latency. Simplicity is at the core of `dokumetry`, enabling you to kickstart comprehensive LLM observability with just two lines of code. It’s designed to blend seamlessly into your projects, supporting integration with leading LLM platforms:
 
- - ✅ OpenAI
- - ✅ Anthropic
- - ✅ Cohere
+- ✅ OpenAI
+- ✅ Anthropic
+- ✅ Cohere
 
-All LLM observability usage data is sent directly to the Doku Platform for streamlined tracking. Get started with Doku Node SDK for simplified and effective observability.
+Deployed as the backbone for all your LLM monitoring needs, `dokumetry` channels crucial usage data directly to Doku, streamlining the tracking process. Unlock efficient and effective observability for your LLM applications with DokuMetry.
 
-## Features
+## 🔥 Features
 
-- **User-friendly UI Logs:** Log all your LLM requests in just two lines of code.
+- **Effortless Integration:** With `dokumetry`, observability comes easy. Elevate your LLM observability by integrating this powerhouse into your projects using just two lines of code. 
 
-- **Cost and Latency Tracking:** Track costs and latencies based on users and custom properties for better analysis.
+- **Zero Latency Impact:** We value the performance of your applications. `dokumetry` is engineered to capture and send data without hampering your application’s speed, ensuring a seamless user experience.
 
-- **Prompt and Response Feedback:** Iterate on prompts and chat conversations directly in the UI.
+- - **Customizable Data Labeling:** Enhance your LLM analytics with customizable environment and application tags. `dokumetry` allows you to append these labels to your data, offering you the capability to sift through your observability data with ease. Drill down and view metrics in Doku, segmented by these specific tags for a more insightful analysis.
 
-- **Collaboration and Sharing:** Share results and collaborate with friends or teammates for more effective teamwork.
 
-- **Very Low Latency Impact** We know latency of your Large-Language Model usage is important to your application's success, that's why we designed Doku SDKs to impact latency as little as possible.
-
-## Installation
+## 💿 Installation
 
 ```bash
 npm install dokumetry
 ```
 
-## Quick Start ⚡️
+## ⚡️ Quick Start
 
 ### OpenAI
 
@@ -49,12 +46,12 @@ const openai = new OpenAI({
   apiKey: 'My API Key', // defaults to process.env["OPENAI_API_KEY"]
 });
 
-// Pass the above `openai` object along with your DOKU URL and API key and this will make sure that all OpenAI calls are automatically tracked.
-DokuMetry.init({llm: openai, dokuUrl: "YOUR_DOKU_URL", apiKey: "YOUR_DOKU_TOKEN"})
+// Pass the above `openai` object along with your Doku Ingester URL and API key and this will make sure that all OpenAI calls are automatically tracked.
+DokuMetry.init({llm: openai, dokuUrl: "YOUR_DOKU_INGESTER_URL", apiKey: "YOUR_DOKU_TOKEN"})
 
 async function main() {
   const chatCompletion = await openai.chat.completions.create({
-    messages: [{ role: 'user', content: 'What are the key to effective observability?' }],
+    messages: [{ role: 'user', content: 'What is LLM Observability and Monitoring?' }],
     model: 'gpt-3.5-turbo',
   });
 }
@@ -69,21 +66,24 @@ import Anthropic from '@anthropic-ai/sdk';
 import DokuMetry from 'dokumetry';
 
 const anthropic = new Anthropic({
-  apiKey: 'my api key', // defaults to process.env["ANTHROPIC_API_KEY"]
+  apiKey: 'my_api_key', // defaults to process.env["ANTHROPIC_API_KEY"]
 });
 
-// Pass the above `anthropic` object along with your DOKU URL and API key and this will make sure that all Anthropic calls are automatically tracked.
-DokuMetry.init({llm: anthropic, dokuUrl: "YOUR_DOKU_URL", apiKey: "YOUR_DOKU_TOKEN"})
+// Pass the above `anthropic` object along with your Doku Ingester URL and API key and this will make sure that all Anthropic calls are automatically tracked.
+DokuMetry.init({llm: anthropic, dokuUrl: "YOUR_DOKU_INGESTER_URL", apiKey: "YOUR_DOKU_TOKEN"})
 
 async function main() {
-  const completion = await anthropic.completions.create({
-    model: 'claude-2',
-    max_tokens_to_sample: 300,
-    prompt: `${Anthropic.HUMAN_PROMPT} how does a court case get to the Supreme Court?${Anthropic.AI_PROMPT}`,
+  const message = await anthropic.messages.create({
+    max_tokens: 1024,
+    messages: [{ role: 'user', content: 'What is LLM Observability and Monitoring?' }],
+    model: 'claude-3-opus-20240229',
   });
+
+  console.log(message.content);
 }
 
 main();
+
 ```
 
 ### Cohere
@@ -93,16 +93,16 @@ import { CohereClient } from "cohere-ai";
 import DokuMetry from 'dokumetry';
 
 const cohere = new CohereClient({
-    apiKey: "YOUR_API_KEY",
+    apiKey: "YOUR_COHERE_API_KEY",
 });
 
-// Pass the above `cohere` object along with your DOKU URL and API key and this will make sure that all Cohere calls are automatically tracked.
-DokuMetry.init({llm: cohere, dokuUrl: "YOUR_DOKU_URL", apiKey: "YOUR_DOKU_TOKEN"})
+// Pass the above `cohere` object along with your Doku Ingester URL and API key and this will make sure that all Cohere calls are automatically tracked.
+DokuMetry.init({llm: cohere, dokuUrl: "YOUR_DOKU_INGESTER_URL", apiKey: "YOUR_DOKU_TOKEN"})
 
 (async () => {
     const prediction = await cohere.generate({
-        prompt: "hello",
-        maxTokens: 10,
+        prompt: "What is LLM Observability and Monitoring?",
+        maxTokens: 100,
     });
     
     console.log("Received prediction", prediction);
@@ -131,20 +131,10 @@ We take backwards-compatibility seriously and work hard to ensure you can rely o
 
 
 ## Requirements
-TypeScript >= 4.5 is supported.
 
 The following runtimes are supported:
 
 - Node.js 18 LTS or later (non-EOL) versions.
-- Deno v1.28.0 or higher, 
-- using import Anthropic from -"npm:@anthropic-ai/tokenizer".
-- Bun 1.0 or later.
-- Cloudflare Workers.
-- Vercel Edge Runtime.
-- Jest 28 or greater with the "node" environment ("jsdom" is not supported at this time).
-- Nitro v2.6 or greater.
-
-Note that React Native is not supported at this time.
 
 If you are interested in other runtime environments, please open or upvote an issue on GitHub.
 
@@ -162,4 +152,4 @@ Doku NPM Package (`dokumetry`) is available under the [Apache-2.0 license](LICEN
 
 ## Support
 
-For support, issues, or feature requests, submit an issue through the [GitHub issues](https://github.com/dokulabs/dokumetry-node/issues) associated with this repository.
+For support, issues, or feature requests, submit an issue through the [GitHub issues](https://github.com/dokulabs/doku/issues) associated with the Doku Repository and add `dokumetry-node` label.
