@@ -1,6 +1,7 @@
 import initOpenAI from './openai.js';
 import initCohere from './cohere.js';
 import initAnthropic from './anthropic.js';
+import initMistral from './mistral.js';
 
 /**
  * Represents the configuration for Doku.
@@ -58,6 +59,8 @@ function init({ llm, dokuUrl, apiKey, environment="default", applicationName="de
     initCohere({ llm, dokuUrl, apiKey, environment, applicationName, skipResp });
   } else if (llm.messages && typeof llm.messages.create === 'function') {
     initAnthropic({ llm, dokuUrl, apiKey, environment, applicationName, skipResp });
+  } else if (llm.listModels && typeof llm.chatStream === 'function') {
+    initMistral({ llm, dokuUrl, apiKey, environment, applicationName, skipResp });
   }
 }
 
