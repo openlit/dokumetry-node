@@ -12,7 +12,7 @@ describe('Anthropic Test', () => {
     const message = await anthropic.messages.create({
       model: "claude-3-opus-20240229",
       max_tokens: 1024,
-      messages: [{ role: "user", content: "Hello, Doku!" }],
+      messages: [{ role: "user", content: "How to monitor LLM Applications?" }],
     });
 
     expect(message.type).to.equal('message');

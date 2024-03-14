@@ -15,7 +15,7 @@ describe('OpenAI Test', () => {
   it('should return a response with object as "chat.completion"', async () => {
     await DokuMetry.init({llm: openai, dokuUrl: process.env.DOKU_URL, apiKey: process.env.DOKU_TOKEN, environment: "dokumetry-testing", applicationName: "dokumetry-node-test", skipResp: false});
     const chatCompletion = await openai.chat.completions.create({
-      messages: [{role: 'user', content: 'Say this is a test'}],
+      messages: [{role: 'user', content: 'What is LLM Monitoring?'}],
       model: 'gpt-3.5-turbo',
     });
 
@@ -26,7 +26,7 @@ describe('OpenAI Test', () => {
     await DokuMetry.init({llm: openai, dokuUrl: process.env.DOKU_URL, apiKey: process.env.DOKU_TOKEN, environment: "dokumetry-testing", applicationName: "dokumetry-node-test", skipResp: false});
     const completion = await openai.completions.create({
       model: 'gpt-3.5-turbo-instruct',
-      prompt: 'Say this is a test.',
+      prompt: 'What is LLM Observability?',
       max_tokens: 7,
     });
 

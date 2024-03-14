@@ -48,7 +48,7 @@ describe('Cohere Test', () => {
     DokuMetry.init({llm: cohere, dokuUrl: process.env.DOKU_URL, apiKey: process.env.DOKU_TOKEN, environment: "dokumetry-testing", applicationName: "dokumetry-node-test", skipResp: false});
     try {
       const generate = await cohere.generate({
-        prompt: 'Doku',
+        prompt: 'How to monitor LLM Applications?',
         maxTokens: 10,
       });
 
@@ -65,7 +65,7 @@ describe('Cohere Test', () => {
     DokuMetry.init({llm: cohere, dokuUrl: process.env.DOKU_URL, apiKey: process.env.DOKU_TOKEN, environment: "dokumetry-testing", applicationName: "dokumetry-node-test", skipResp: false});
     try {
       const embeddings = await cohere.embed({
-        texts: ['This is a test'],
+        texts: ['What is AI Observability?'],
         model: 'embed-multilingual-v2.0',
       });
       expect(embeddings.id).to.exist;
@@ -81,7 +81,7 @@ describe('Cohere Test', () => {
     DokuMetry.init({llm: cohere, dokuUrl: process.env.DOKU_URL, apiKey: process.env.DOKU_TOKEN, environment: "dokumetry-testing", applicationName: "dokumetry-node-test", skipResp: false});
     try {
       const chatResponse = await cohere.chat({
-        message: 'Say this is a test',
+        message: 'How to monitor AI Applications?',
         model: 'command',
       });
 
