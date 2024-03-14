@@ -27,6 +27,25 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
+    - name: Setup Docker
+      uses: docker/setup-action@v2
+
+    - name: Setup Doku Stack
+      run: docker-compose up -d
+    
+    - name: Sleep for 30 seconds
+      run: sleep 30
+
+    - name: Make API Request and Set DOKU_TOKEN
+      run: |
+        RESPONSE=$(curl --request POST \
+          --url https://127.0.0.1:9044/api/keys \
+          --header 'Authorization: ""' \
+          --header 'Content-Type: application/json' \
+          --data '{"name": "GITHUB"}' )
+        MESSAGE=$(echo $RESPONSE | jq -r '.message')
+        echo "DOKU_TOKEN=${MESSAGE}" >> $GITHUB_ENV
+
     - name: Setup Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v3
       with:
