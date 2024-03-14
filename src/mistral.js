@@ -76,9 +76,8 @@ export default function initMistral({ llm, dokuUrl, apiKey, environment, applica
         finishReason: response.choices[0].finish_reason,
         response: String(response.choices[0].message.content),
     };
-    
-    console.log(data)
-    //await sendData(data, dokuUrl, apiKey);
+
+    await sendData(data, dokuUrl, apiKey);
 
     return response;
   };
@@ -135,8 +134,7 @@ export default function initMistral({ llm, dokuUrl, apiKey, environment, applica
     const end = performance.now();
     data.requestDuration = (end - start) / 1000;
 
-    console.log(data);
-    //await sendData(data, dokuUrl, apiKey);
+    await sendData(data, dokuUrl, apiKey);
 
     return response;
   };
@@ -165,8 +163,7 @@ export default function initMistral({ llm, dokuUrl, apiKey, environment, applica
       totalTokens: response.usage.total_tokens,
     };
 
-    console.log(data);
-    //await sendData(data, dokuUrl, apiKey);
+    await sendData(data, dokuUrl, apiKey);
 
     return response;
   };
