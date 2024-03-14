@@ -66,8 +66,8 @@ export default function initCohere({ llm, dokuUrl, apiKey, environment, applicat
       if (!params.hasOwnProperty('stream') || params.stream !== true) {
         data.finishReason = generation.finish_reason;
       }
-      console.log(data);
-      //await sendData(data, dokuUrl, apiKey);
+
+      await sendData(data, dokuUrl, apiKey);
     }
 
     return response;
