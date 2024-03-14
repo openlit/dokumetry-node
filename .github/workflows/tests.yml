@@ -43,6 +43,10 @@ jobs:
           -d '{"Name": "GITHUBACTION"}')
         MESSAGE=$(echo $RESPONSE | jq -r '.message')
         echo "DOKU_TOKEN=${MESSAGE}" >> $GITHUB_ENV
+    
+    - name: Use DOKU_TOKEN
+      run: |
+        echo "The DOKU_TOKEN is $DOKU_TOKEN"
 
     - name: Setup Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v3
