@@ -16,5 +16,5 @@ describe('Anthropic Test', () => {
     });
 
     expect(message.type).to.equal('message');
-  }).timeout(10000);
+  }).timeout(30000);
 });

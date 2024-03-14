@@ -20,7 +20,7 @@ describe('OpenAI Test', () => {
     });
 
     expect(chatCompletion.object).to.equal('chat.completion');
-  });
+  }).timeout(30000);;
 
   it('should return a response with object as "text_completion"', async () => {
     await DokuMetry.init({llm: openai, dokuUrl: process.env.DOKU_URL, apiKey: process.env.DOKU_TOKEN, environment: "dokumetry-testing", applicationName: "dokumetry-node-test", skipResp: false});
@@ -31,7 +31,7 @@ describe('OpenAI Test', () => {
     });
 
     expect(completion.object).to.equal('text_completion');
-  });
+  }).timeout(30000);;
 
   it('should return a response with object as "embedding"', async () => {
     await DokuMetry.init({llm: openai, dokuUrl: process.env.DOKU_URL, apiKey: process.env.DOKU_TOKEN, environment: "dokumetry-testing", applicationName: "dokumetry-node-test", skipResp: false});
@@ -42,7 +42,7 @@ describe('OpenAI Test', () => {
     });
 
     expect(embeddings.data[0].object).to.equal('embedding');
-  });
+  }).timeout(30000);;
 
   it('should return a response with object as "fine_tuning.job"', async () => {
     await DokuMetry.init({llm: openai, dokuUrl: process.env.DOKU_URL, apiKey: process.env.DOKU_TOKEN, environment: "dokumetry-testing", applicationName: "dokumetry-node-test", skipResp: false});

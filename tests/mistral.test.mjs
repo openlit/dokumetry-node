@@ -18,7 +18,7 @@ describe('Mistral Test', () => {
     });
 
     expect(message.object).to.equal('list');
-  }).timeout(10000);
+  }).timeout(30000);
 
   it('should return a response with object as "chat.completion"', async () => {
     DokuMetry.init({llm: client, dokuUrl: process.env.DOKU_URL, apiKey: process.env.DOKU_TOKEN, environment: "dokumetry-testing", applicationName: "dokumetry-node-test", skipResp: false});
@@ -28,5 +28,5 @@ describe('Mistral Test', () => {
     });
 
     expect(message.object).to.equal('chat.completion');
-  }).timeout(10000);
+  }).timeout(30000);
 });
