@@ -183,7 +183,7 @@ export default function initAzureOpenAI({ llm, dokuUrl, apiKey, environment, app
     let streaming = params.stream || false;
     if (streaming) {
       // Call original method
-      const originalResponseStream = await originalChatCreate.call(this, params);
+      const originalResponseStream = await originalCompletionsCreate.call(this, params);
   
       // Create a pass-through stream
       const passThroughStream = new Readable({
@@ -197,9 +197,8 @@ export default function initAzureOpenAI({ llm, dokuUrl, apiKey, environment, app
       // Immediately-invoked async function to handle streaming
       (async () => {
         for await (const chunk of originalResponseStream) {
-          var content = chunk.choices[0].text;
-          if (content) {
-            dataResponse += content;
+          if (chunk.choices.length > 0) {
+            dataResponse += chunk.choices[0].text;
             passThroughStream.push(chunk); // Push chunk to the pass-through stream
           }
           var responseId = chunk.id;
