@@ -100,7 +100,7 @@ export default function initAzureOpenAI({ llm, dokuUrl, apiKey, environment, app
           endpoint: 'azure.chat.completions',
           skipResp: skipResp,
           requestDuration: duration,
-          model: chatModel,
+          model: "azure_" + chatModel,
           prompt: prompt,
           response: dataResponse
         };
@@ -219,7 +219,7 @@ export default function initAzureOpenAI({ llm, dokuUrl, apiKey, environment, app
           endpoint: 'azure.completions',
           skipResp: skipResp,
           requestDuration: duration,
-          model: chatModel,
+          model: "azure_" + chatModel,
           prompt: params.prompt,
           response: dataResponse
         };
