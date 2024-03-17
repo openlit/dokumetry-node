@@ -184,7 +184,7 @@ export default function initOpenAI({ llm, dokuUrl, apiKey, environment, applicat
     let streaming = params.stream || false;
     if (streaming) {
       // Call original method
-      const originalResponseStream = await originalChatCreate.call(this, params);
+      const originalResponseStream = await originalCompletionsCreate.call(this, params);
   
       // Create a pass-through stream
       const passThroughStream = new Readable({
