@@ -21,7 +21,7 @@ describe('Anthropic Test', () => {
 
   it('should return a response with type as "message"', async () => {
     DokuMetry.init({llm: anthropic, dokuUrl: process.env.DOKU_URL, apiKey: process.env.DOKU_TOKEN, environment: "dokumetry-testing", applicationName: "dokumetry-node-test", skipResp: false});
-    stream = await anthropic.messages.create({
+    var stream = await anthropic.messages.create({
       max_tokens: 100,
       messages: [{ role: 'user', content: 'How to monitor LLM Applications in one sentence?' }],
       model: 'claude-3-opus-20240229',
