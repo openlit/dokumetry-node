@@ -92,6 +92,7 @@ export default function initCohere({ llm, dokuUrl, apiKey, environment, applicat
       model: model,
       prompt: prompt,
       promptTokens: response.meta["billedUnits"]["inputTokens"],
+      totalTokens: response.meta["billedUnits"]["inputTokens"],
     };
 
     await sendData(data, dokuUrl, apiKey);
