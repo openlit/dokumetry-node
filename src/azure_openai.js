@@ -2,9 +2,9 @@ import {sendData} from './helpers.js';
 import { Readable } from 'stream';
 
 /**
- * Initializes OpenAI functionality with performance tracking and data logging.
+ * Initializes Azure OpenAI functionality with performance tracking and data logging.
  *
- * @param {Object} llm - The OpenAI function object.
+ * @param {Object} llm - The Azure OpenAI function object.
  * @param {string} dokuUrl - The URL for logging data.
  * @param {string} apiKey - The authentication apiKey.
  * @param {string} environment - The environment.
@@ -14,9 +14,9 @@ import { Readable } from 'stream';
  *
  * @jsondoc
  * {
- *   "description": "Performance tracking for OpenAI APIs",
+ *   "description": "Performance tracking for Azure OpenAI APIs",
  *   "params": [
- *     {"name": "llm", "type": "Object", "description": "OpenAI function."},
+ *     {"name": "llm", "type": "Object", "description": "Azure OpenAI function."},
  *     {"name": "dokuUrl", "type": "string", "description": "The URL"},
  *     {"name": "apiKey", "type": "string", "description": "The auth apiKey."},
  *     {"name": "environment", "type": "string", "description": "The environment."},
@@ -26,19 +26,16 @@ import { Readable } from 'stream';
  *   "returns": {"type": "void"},
  *   "example": {
  *     "description": "Example usage of init function.",
- *     "code": "init(openaiFunc, 'https://example.com/log', 'authToken');"
+ *     "code": "init(azureOenaiFunc, 'https://example.com/log', 'authToken');"
  *   }
  * }
  */
-export default function initOpenAI({ llm, dokuUrl, apiKey, environment, applicationName, skipResp }) {
+export default function initAzureOpenAI({ llm, dokuUrl, apiKey, environment, applicationName, skipResp }) {
   // Save original method
   const originalChatCreate = llm.chat.completions.create;
   const originalCompletionsCreate = llm.completions.create;
   const originalEmbeddingsCreate = llm.embeddings.create;
-  const originalFineTuningJobsCreate = llm.fineTuning.jobs.create;
   const originalImagesCreate = llm.images.generate;
-  const originalImagesCreateVariation = llm.images.createVariation;
-  const originalAudioSpeechCreate = llm.audio.speech.create;
 
   // Define wrapped method
   llm.chat.completions.create = async function(params) {
@@ -55,6 +52,7 @@ export default function initOpenAI({ llm, dokuUrl, apiKey, environment, applicat
       });
   
       let dataResponse = '';
+      let chatModel = '';
   
       // Immediately-invoked async function to handle streaming
       (async () => {
@@ -65,6 +63,7 @@ export default function initOpenAI({ llm, dokuUrl, apiKey, environment, applicat
             passThroughStream.push(chunk); // Push chunk to the pass-through stream
           }
           var responseId = chunk.id;
+          chatModel = chunk.model;
         }
         passThroughStream.push(null); // Signal end of the pass-through stream
   
@@ -98,10 +97,10 @@ export default function initOpenAI({ llm, dokuUrl, apiKey, environment, applicat
           environment: environment,
           applicationName: applicationName,
           sourceLanguage: 'Javascript',
-          endpoint: 'openai.chat.completions',
+          endpoint: 'azure.chat.completions',
           skipResp: skipResp,
           requestDuration: duration,
-          model: params.model,
+          model: "azure_" + chatModel,
           prompt: prompt,
           response: dataResponse
         };
@@ -142,10 +141,10 @@ export default function initOpenAI({ llm, dokuUrl, apiKey, environment, applicat
         environment: environment,
         applicationName: applicationName,
         sourceLanguage: 'Javascript',
-        endpoint: 'openai.chat.completions',
+        endpoint: 'azure.chat.completions',
         skipResp: skipResp,
         requestDuration: duration,
-        model: params.model,
+        model: "azure_" + response.model,
         prompt: prompt,
       };
 
@@ -193,16 +192,17 @@ export default function initOpenAI({ llm, dokuUrl, apiKey, environment, applicat
       });
   
       let dataResponse = '';
+      let chatModel = '';
   
       // Immediately-invoked async function to handle streaming
       (async () => {
         for await (const chunk of originalResponseStream) {
-          var content = chunk.choices[0].text;
-          if (content) {
-            dataResponse += content;
+          if (chunk.choices.length > 0) {
+            dataResponse += chunk.choices[0].text;
             passThroughStream.push(chunk); // Push chunk to the pass-through stream
           }
           var responseId = chunk.id;
+          chatModel = chunk.model;
         }
         passThroughStream.push(null); // Signal end of the pass-through stream
   
@@ -215,10 +215,10 @@ export default function initOpenAI({ llm, dokuUrl, apiKey, environment, applicat
           environment: environment,
           applicationName: applicationName,
           sourceLanguage: 'Javascript',
-          endpoint: 'openai.completions',
+          endpoint: 'azure.completions',
           skipResp: skipResp,
           requestDuration: duration,
-          model: params.model,
+          model: "azure_" + chatModel,
           prompt: params.prompt,
           response: dataResponse
         };
@@ -239,10 +239,10 @@ export default function initOpenAI({ llm, dokuUrl, apiKey, environment, applicat
         environment: environment,
         applicationName: applicationName,
         sourceLanguage: 'Javascript',
-        endpoint: 'openai.completions',
+        endpoint: 'azure.completions',
         skipResp: skipResp,
         requestDuration: duration,
-        model: params.model,
+        model: "azure_" + response.model,
         prompt: params.prompt,
       };
 
@@ -287,36 +287,13 @@ export default function initOpenAI({ llm, dokuUrl, apiKey, environment, applicat
       environment: environment,
       applicationName: applicationName,
       sourceLanguage: 'Javascript',
-      endpoint: 'openai.embeddings',
+      endpoint: 'azure.embeddings',
       skipResp: skipResp,
       requestDuration: duration,
-      model: params.model,
+      model: "azure_" + response.model,
       prompt: params.input,
       promptTokens: response.usage.prompt_tokens,
       totalTokens: response.usage.total_tokens,
-    };
-
-    await sendData(data, dokuUrl, apiKey);
-
-    return response;
-  };
-
-  llm.fineTuning.jobs.create = async function(params) {
-    const start = performance.now();
-    const response = await originalFineTuningJobsCreate.call(this, params);
-    const end = performance.now();
-    const duration = (end - start) / 1000;
-
-    const data = {
-      environment: environment,
-      applicationName: applicationName,
-      sourceLanguage: 'Javascript',
-      endpoint: 'openai.fine_tuning',
-      skipResp: skipResp,
-      requestDuration: duration,
-      model: params.model,
-      llmReqId: response.id,
-      finetuneJobStatus: response.status,
     };
 
     await sendData(data, dokuUrl, apiKey);
@@ -330,7 +307,7 @@ export default function initOpenAI({ llm, dokuUrl, apiKey, environment, applicat
     const end = performance.now();
     const duration = (end - start) / 1000;
     const size = params.size || '1024x1024';
-    const model = params.model || 'dall-e-2';
+    const model = 'azure_dall-e-3';
     let imageFormat = 'url';
 
     if (params.response_format && params.response_format === 'b64_json') {
@@ -345,7 +322,7 @@ export default function initOpenAI({ llm, dokuUrl, apiKey, environment, applicat
         environment: environment,
         applicationName: applicationName,
         sourceLanguage: 'Javascript',
-        endpoint: 'openai.images.create',
+        endpoint: 'azure.images.create',
         skipResp: skipResp,
         requestDuration: duration,
         model: model,
@@ -362,59 +339,4 @@ export default function initOpenAI({ llm, dokuUrl, apiKey, environment, applicat
     return response;
   };
 
-  llm.images.createVariation = async function(params) {
-    const start = performance.now();
-    const response = await originalImagesCreateVariation.call(this, params);
-    const end = performance.now();
-    const duration = (end - start) / 1000;
-    const size = params.size || '1024x1024'; // Default size if not provided
-    const model = params.model || 'dall-e-2';
-    let imageFormat = 'url';
-    if (params.response_format && params.response_format === 'b64_json') {
-      imageFormat = 'b64_json';
-    }
-    var responseId = response.created;
-    for (const item of response.data) {
-      const data = {
-        llmReqId: responseId,
-        environment: environment,
-        applicationName: applicationName,
-        sourceLanguage: 'Javascript',
-        endpoint: 'openai.images.create.variations',
-        skipResp: skipResp,
-        requestDuration: duration,
-        model: model,
-        imageSize: size,
-        imageQuality: "standard",
-        image: item[imageFormat],
-      };
-
-      await sendData(data, dokuUrl, apiKey);
-    }
-
-    return response;
-  };
-
-  llm.audio.speech.create = async function(params) {
-    const start = performance.now();
-    const response = await originalAudioSpeechCreate.call(this, params);
-    const end = performance.now();
-    const duration = (end - start) / 1000;
-
-    const data = {
-      environment: environment,
-      applicationName: applicationName,
-      sourceLanguage: 'Javascript',
-      endpoint: 'openai.audio.speech.create',
-      skipResp: skipResp,
-      requestDuration: duration,
-      model: params.model,
-      prompt: params.input,
-      audioVoice: params.voice,
-    };
-
-    await sendData(data, dokuUrl, apiKey);
-
-    return response;
-  };
 }

@@ -1,6 +1,8 @@
 import initOpenAI from './openai.js';
 import initCohere from './cohere.js';
 import initAnthropic from './anthropic.js';
+import initMistral from './mistral.js';
+import initAzureOpenAI from './azure_openai.js';
 
 /**
  * Represents the configuration for Doku.
@@ -52,12 +54,16 @@ function init({ llm, dokuUrl, apiKey, environment="default", applicationName="de
   DokuConfig.applicationName = applicationName;
   DokuConfig.skipResp = skipResp;
 
-  if (llm.fineTuning && typeof llm.completions.create === 'function') {
+  if (llm.fineTuning && typeof llm.completions.create === 'function' && !(llm.baseURL.includes('azure.com'))) {
     initOpenAI({ llm, dokuUrl, apiKey, environment, applicationName, skipResp });
+  } else  if (llm.fineTuning && typeof llm.completions.create === 'function' && llm.baseURL.includes('azure.com')) {
+    initAzureOpenAI({ llm, dokuUrl, apiKey, environment, applicationName, skipResp });
   } else if (llm.generate && typeof llm.rerank === 'function') {
     initCohere({ llm, dokuUrl, apiKey, environment, applicationName, skipResp });
   } else if (llm.messages && typeof llm.messages.create === 'function') {
     initAnthropic({ llm, dokuUrl, apiKey, environment, applicationName, skipResp });
+  } else if (llm.listModels && typeof llm.chatStream === 'function') {
+    initMistral({ llm, dokuUrl, apiKey, environment, applicationName, skipResp });
   }
 }
 
