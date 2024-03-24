@@ -13,7 +13,7 @@ describe('Anthropic Test', () => {
     try {
       const message = await anthropic.messages.create({
         model: "claude-3-opus-20240229",
-        max_tokens: 10,
+        max_tokens: 1,
         messages: [{ role: "user", content: "How to monitor LLM Applications in one sentence?" }],
       });
       expect(message.type).to.equal('message');
@@ -28,7 +28,7 @@ describe('Anthropic Test', () => {
     DokuMetry.init({llm: anthropic, dokuUrl: process.env.DOKU_URL, apiKey: process.env.DOKU_TOKEN, environment: "dokumetry-testing", applicationName: "dokumetry-node-test", skipResp: false});
     try {
       var stream = await anthropic.messages.create({
-        max_tokens: 10,
+        max_tokens: 1,
         messages: [{ role: 'user', content: 'How to monitor LLM Applications in one sentence?' }],
         model: 'claude-3-opus-20240229',
         stream: true,
