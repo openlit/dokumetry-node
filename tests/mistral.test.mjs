@@ -25,6 +25,7 @@ describe('Mistral Test', () => {
     const message = await client.chat({
       model: 'mistral-large-latest',
       messages: [{role: 'user', content: 'What is LLM Observability?'}],
+      maxTokens: 10,
     });
 
     expect(message.object).to.equal('chat.completion');
