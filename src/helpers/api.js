@@ -1,3 +1,5 @@
+import { logError } from "./logger.js";
+
 /**
  * Sends data to the specified Doku URL using the provided authentication apiKey.
  *
@@ -25,24 +27,23 @@
  * }
  */
 export async function sendData(data, dokuUrl, authToken) {
-  // Remove trailing slash if present
-  const url = dokuUrl.endsWith('/') ? dokuUrl.slice(0, -1) : dokuUrl;
-  try {
-    const response = await fetch(`${url}/api/push`, {
-      method: 'post',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': authToken,
-      },
-      body: JSON.stringify(data),
-    });
-    
-    if (!response.ok) {
-      throw new Error(`Error sending Data: HTTP status ${response.status}`);
-    }
-    return response;
-    
-  } catch (err) {
-    throw new Error(`Error sending Metrics: ${err}`);
-  }
+	// Remove trailing slash if present
+	const url = dokuUrl.endsWith("/") ? dokuUrl.slice(0, -1) : dokuUrl;
+	try {
+		const response = await fetch(`${url}/api/push`, {
+			method: "post",
+			headers: {
+				"Content-Type": "application/json",
+				Authorization: authToken,
+			},
+			body: JSON.stringify(data),
+		});
+
+		if (!response.ok) {
+			logError(`Error sending Data: HTTP status ${response.status}`);
+		}
+		return response;
+	} catch (err) {
+		logError(`Error sending Metrics: ${err}`);
+	}
 }

@@ -123,6 +123,9 @@ DokuMetry.init({llm: cohere, dokuUrl: "YOUR_DOKU_INGESTER_URL", apiKey: "YOUR_DO
 | skipResp          | Skip response from the Doku Ingester for faster execution | Optional      |
 
 
+## Error
+To make it easier to follow the server errors caused by dokumetry, we have logged the errors like `Dokumetry: Error transmitting Data: HTTP status 401`, where `Dokumetry` is the application name in blue and the rest is the error in red.
+
 ## Semantic Versioning
 This package generally follows [SemVer](https://semver.org/spec/v2.0.0.html) conventions, though certain backwards-incompatible changes may be released as minor versions:
 

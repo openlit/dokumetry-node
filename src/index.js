@@ -1,20 +1,20 @@
-import initOpenAI from './openai.js';
-import initCohere from './cohere.js';
-import initAnthropic from './anthropic.js';
-import initMistral from './mistral.js';
-import initAzureOpenAI from './azure_openai.js';
+import initOpenAI from "./providers/openai.js";
+import initCohere from "./providers/cohere.js";
+import initAnthropic from "./providers/anthropic.js";
+import initMistral from "./providers/mistral.js";
+import initAzureOpenAI from "./providers/azure_openai.js";
 
 /**
  * Represents the configuration for Doku.
  * @class DokuConfig
  */
 class DokuConfig {
-  static dokuUrl = null;
-  static apiKey = null;
-  static llm = null;
-  static environment = null;
-  static applicationName = null;
-  static skipResp = null;
+	static dokuUrl = null;
+	static apiKey = null;
+	static llm = null;
+	static environment = null;
+	static applicationName = null;
+	static skipResp = null;
 }
 
 /**
@@ -46,30 +46,80 @@ class DokuConfig {
  *   }
  * }
  */
-function init({ llm, dokuUrl, apiKey, environment="default", applicationName="default", skipResp=false }) {
-  DokuConfig.dokuUrl = dokuUrl;
-  DokuConfig.apiKey = apiKey;
-  DokuConfig.llm = llm;
-  DokuConfig.environment = environment;
-  DokuConfig.applicationName = applicationName;
-  DokuConfig.skipResp = skipResp;
+function init({
+	llm,
+	dokuUrl,
+	apiKey,
+	environment = "default",
+	applicationName = "default",
+	skipResp = false,
+}) {
+	DokuConfig.dokuUrl = dokuUrl;
+	DokuConfig.apiKey = apiKey;
+	DokuConfig.llm = llm;
+	DokuConfig.environment = environment;
+	DokuConfig.applicationName = applicationName;
+	DokuConfig.skipResp = skipResp;
 
-  if (llm.fineTuning && typeof llm.completions.create === 'function' && !(llm.baseURL.includes('azure.com'))) {
-    initOpenAI({ llm, dokuUrl, apiKey, environment, applicationName, skipResp });
-  } else  if (llm.fineTuning && typeof llm.completions.create === 'function' && llm.baseURL.includes('azure.com')) {
-    initAzureOpenAI({ llm, dokuUrl, apiKey, environment, applicationName, skipResp });
-  } else if (llm.generate && typeof llm.rerank === 'function') {
-    initCohere({ llm, dokuUrl, apiKey, environment, applicationName, skipResp });
-  } else if (llm.messages && typeof llm.messages.create === 'function') {
-    initAnthropic({ llm, dokuUrl, apiKey, environment, applicationName, skipResp });
-  } else if (llm.listModels && typeof llm.chatStream === 'function') {
-    initMistral({ llm, dokuUrl, apiKey, environment, applicationName, skipResp });
-  }
+	if (
+		llm.fineTuning &&
+		typeof llm.completions.create === "function" &&
+		!llm.baseURL.includes("azure.com")
+	) {
+		initOpenAI({
+			llm,
+			dokuUrl,
+			apiKey,
+			environment,
+			applicationName,
+			skipResp,
+		});
+	} else if (
+		llm.fineTuning &&
+		typeof llm.completions.create === "function" &&
+		llm.baseURL.includes("azure.com")
+	) {
+		initAzureOpenAI({
+			llm,
+			dokuUrl,
+			apiKey,
+			environment,
+			applicationName,
+			skipResp,
+		});
+	} else if (llm.generate && typeof llm.rerank === "function") {
+		initCohere({
+			llm,
+			dokuUrl,
+			apiKey,
+			environment,
+			applicationName,
+			skipResp,
+		});
+	} else if (llm.messages && typeof llm.messages.create === "function") {
+		initAnthropic({
+			llm,
+			dokuUrl,
+			apiKey,
+			environment,
+			applicationName,
+			skipResp,
+		});
+	} else if (llm.listModels && typeof llm.chatStream === "function") {
+		initMistral({
+			llm,
+			dokuUrl,
+			apiKey,
+			environment,
+			applicationName,
+			skipResp,
+		});
+	}
 }
 
 // Setting up the dokumetry namespace object
 const DokuMetry = {
-  init: init,
+	init: init,
 };
 
 export default DokuMetry;

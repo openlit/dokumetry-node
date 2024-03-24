@@ -23,8 +23,9 @@ describe('Mistral Test', () => {
   it('should return a response with object as "chat.completion"', async () => {
     DokuMetry.init({llm: client, dokuUrl: process.env.DOKU_URL, apiKey: process.env.DOKU_TOKEN, environment: "dokumetry-testing", applicationName: "dokumetry-node-test", skipResp: false});
     const message = await client.chat({
-      model: 'mistral-large-latest',
+      model: 'open-mistral-7b',
       messages: [{role: 'user', content: 'What is LLM Observability?'}],
+      maxTokens: 1,
     });
 
     expect(message.object).to.equal('chat.completion');
