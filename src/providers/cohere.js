@@ -128,7 +128,7 @@ export default function initCohere({
 			prompt: prompt,
 			promptTokens: response.meta["billed_units"]["output_tokens"],
 			completionTokens: response.meta["billed_units"]["input_tokens"],
-			totalTokens: response.token_count["billed_units"],
+			totalTokens: response.token_count["billed_tokens"],
 			response: response.text,
 		};
 
