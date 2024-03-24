@@ -18,8 +18,8 @@ describe('Anthropic Test', () => {
       });
       expect(message.type).to.equal('message');
     } catch (error) {
-        if (error.type === 'rate_limit_error') {
-          console.error(`Daily Rate limit Reached`);
+        if (typeof error.message === 'string' && error.message.includes('rate limit')) {
+          console.error("Daily Rate limit Reached");
         }
     }
   }).timeout(30000);
@@ -42,8 +42,8 @@ describe('Anthropic Test', () => {
         }
       }
     } catch (error) {
-        if (error.type === 'rate_limit_error') {
-          console.error(`Daily Rate limit Reached`);
+        if (typeof error.message === 'string' && error.message.includes('rate limit')) {
+          console.error("Daily Rate limit Reached");
         }
     }
   }).timeout(30000);
